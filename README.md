@@ -27,10 +27,7 @@ Ejecute:
 
 <details>
    <summary>Answer</summary>
-   Coloque aqui su respuerta
-   </details>
-   <br>
-La utilización de la CPU se calcula como el tiempo total que la CPU está ocupada dividido por el tiempo total de ejecución.
+   La utilización de la CPU se calcula como el tiempo total que la CPU está ocupada dividido por el tiempo total de ejecución.
 ```
 Utilización de la CPU = (Tiempo CPU ocupada / Tiempo total) * 100%
 ```
@@ -80,7 +77,8 @@ Stats: IO Busy  0 (0.00%)
 ```
 
 Por lo tanto, los resultados obtenidos con `-c` y `-p` confirman la predicción de que la CPU estuvo completamente utilizada.
-
+   </details>
+   <br>
 
 ---
 
