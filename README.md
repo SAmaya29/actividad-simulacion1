@@ -87,6 +87,7 @@ Ejecute:
 📌 **¿Cuánto tarda en completarse ambos procesos?** Use `-c` y `-p` para confirmar.
 
 **📝 Respuesta:**
+
 Ejecutando el script podemos evidenciar lo siguiente:
 ```
 Process 0
@@ -160,6 +161,7 @@ Ejecute:
 📌 **¿Qué sucede ahora? ¿Importa el orden de los procesos?** Justifique con `-c` y `-p`.
 
 **📝 Respuesta:**
+
 Cuando se invierte el orden de los procesos, el comportamiento del sistema cambia notablemente. En este caso, el Proceso 0 realiza una operación de E/S al inicio, lo que lo deja en estado bloqueado hasta que la operación finalice. Mientras tanto, el Proceso 1 ejecuta sus cuatro instrucciones en la CPU de manera continua.
 Viendo la ejecucion del script evidenciamos lo antes mencionado:
 ```
@@ -213,6 +215,38 @@ Ejecute:
 
 **📝 Respuesta:**
 
+La bandera -S SWITCH_ON_END hace que el sistema no cambie de proceso mientras el actual no haya terminado por completo, incluso si está bloqueado por una operación de Entrada/Salida (E/S). 
+Sabiendo esto vamos a observar la informacion detallada que nos ofrece el script
+
+📊 **Estadísticas del sistema**:  
+```
+Time        PID: 0        PID: 1           CPU           IOs
+  1         RUN:io         READY             1
+  2        BLOCKED         READY                           1
+  3        BLOCKED         READY                           1
+  4        BLOCKED         READY                           1
+  5        BLOCKED         READY                           1
+  6        BLOCKED         READY                           1
+  7*   RUN:io_done         READY             1
+  8           DONE       RUN:cpu             1
+  9           DONE       RUN:cpu             1
+ 10           DONE       RUN:cpu             1
+ 11           DONE       RUN:cpu             1
+
+```
+
+Lo que se observa en la ejecucion es lo siguiente:
+1. **El Proceso 0 comienza su ejecución y realiza una operación de E/S inmediatamente.**
+   -Dado que SWITCH_ON_END está activado, el sistema no cambia al Proceso 1 mientras el Proceso 0 no termine completamente.
+   -Como resultado, la CPU queda inactiva mientras la E/S se completa.
+2. **La CPU permanece sin uso durante varios ciclos (tiempos 2-6), esperando que la E/S termine.**
+   -Esto es ineficiente, ya que el Proceso 1, que solo usa CPU y está listo para ejecutarse, no puede hacerlo hasta que el Proceso 0 finalice completamente.
+3. **Cuando la E/S del Proceso 0 termina (tiempo 7), este finaliza su ejecución.**
+   -Solo entonces el Proceso 1 puede comenzar su ejecución en la CPU.
+4. **El Proceso 1 ejecuta sus 4 instrucciones de CPU consecutivamente.**
+
+#### Conclusión 
+El uso de SWITCH_ON_END en este escenario provoca que la CPU se desperdicie mientras el Proceso 0 espera por su operación de E/S. Esto reduce la eficiencia del sistema, ya que el Proceso 1 pudo haber utilizado la CPU durante ese tiempo muerto.
 ---
 
 ### ⚡ Pregunta 5
