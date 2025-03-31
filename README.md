@@ -24,6 +24,7 @@ Ejecute:
 📌 **¿Cuál debería ser la utilización de la CPU?** Justifique su respuesta. Luego, use `-c` y `-p` para verificar.
 
 **📝 Respuesta:**
+
 La utilización de la CPU se calcula como el tiempo total que la CPU está ocupada dividido por el tiempo total de ejecución.
 Se obtiene el siguiente resultado:
 ```plaintext
@@ -81,6 +82,50 @@ Ejecute:
 📌 **¿Cuánto tarda en completarse ambos procesos?** Use `-c` y `-p` para confirmar.
 
 **📝 Respuesta:**
+Ejecutamos el comando:  
+```bash
+./process-run.py -l 4:100,1:0
+```
+Esto define dos procesos:  
+- **Proceso 0**: Tiene **4 instrucciones CPU**.  
+- **Proceso 1**: Realiza **una operación de E/S (IO) y espera** a que termine.  
+
+#### 🔎 Análisis del tiempo total  
+1. **El Proceso 0** ejecuta sus 4 instrucciones CPU sin interrupción (t = 1 a 4).  
+2. **El Proceso 1** inicia su operación de E/S en t = 5.  
+3. La E/S bloquea al Proceso 1 durante **5 unidades de tiempo** (t = 6 a 10).  
+4. Finalmente, el Proceso 1 completa su ejecución en **t = 11**.  
+
+Ejecutando el siguiente comando podemos obtener estadísticas mas detalladas:
+```bash
+./process-run.py -l 4:100,1:0 -c -p
+```
+
+📊 **Estadísticas del sistema**:  
+```
+Time        PID: 0        PID: 1           CPU           IOs
+  1        RUN:cpu         READY             1
+  2        RUN:cpu         READY             1
+  3        RUN:cpu         READY             1
+  4        RUN:cpu         READY             1
+  5           DONE        RUN:io             1
+  6           DONE       BLOCKED                           1
+  7           DONE       BLOCKED                           1
+  8           DONE       BLOCKED                           1
+  9           DONE       BLOCKED                           1
+ 10           DONE       BLOCKED                           1
+ 11*          DONE   RUN:io_done             1
+
+Stats: Total Time 11
+Stats: CPU Busy 6 (54.55%)
+Stats: IO Busy  5 (45.45%)
+```
+- **Tiempo total**: **11 unidades de tiempo**.  
+- **Uso de CPU**: 6 unidades de tiempo (**54.55% de utilización**).  
+- **Uso de IO**: 5 unidades de tiempo (**45.45% de utilización**).  
+
+#### Conclusión  
+El tiempo total de ejecución es **11 unidades de tiempo**, ya que la operación de E/S introduce un retraso significativo. Sin esta espera, el sistema habría finalizado en **5 unidades de tiempo**. Esto demuestra cómo las operaciones de E/S afectan el rendimiento y utilización del procesador.  
 
 ---
 
