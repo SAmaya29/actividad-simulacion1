@@ -199,7 +199,9 @@ Stats: IO Busy  5 (71.43%)
 - **Uso de IO**: 5 unidades de tiempo (**71.43% de utilización**).
 
 #### Conclusión 
+
 Sí importa el orden de los procesos, porque en este caso, la CPU no se queda inactiva en ningún momento. Al iniciar con una operación de E/S, el sistema aprovecha el tiempo en el que el Proceso 0 está bloqueado para ejecutar el Proceso 1 sin interrupciones. Esto resulta en una mayor eficiencia en la utilización de la CPU, en comparación con el escenario anterior, donde se terminaba el proceso que usaba CPU antes de ejecutar la E/S.
+
 ---
 
 ### ⏳ Pregunta 4
