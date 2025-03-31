@@ -82,10 +82,20 @@ Ejecute:
 📌 **¿Cuánto tarda en completarse ambos procesos?** Use `-c` y `-p` para confirmar.
 
 **📝 Respuesta:**
-Ejecutamos el comando:  
-```bash
-./process-run.py -l 4:100,1:0
+Ejecutando el script podemos evidenciar lo siguiente:
 ```
+Process 0
+  cpu
+  cpu
+  cpu
+  cpu
+
+Process 1
+  io
+  io_done
+
+```
+
 Esto define dos procesos:  
 - **Proceso 0**: Tiene **4 instrucciones CPU**.  
 - **Proceso 1**: Realiza **una operación de E/S (IO) y espera** a que termine.  
@@ -94,9 +104,9 @@ Esto define dos procesos:
 1. **El Proceso 0** ejecuta sus 4 instrucciones CPU sin interrupción (t = 1 a 4).  
 2. **El Proceso 1** inicia su operación de E/S en t = 5.  
 3. La E/S bloquea al Proceso 1 durante **5 unidades de tiempo** (t = 6 a 10).  
-4. Finalmente, el Proceso 1 completa su ejecución en **t = 11**.  
+4. Finalmente, el Proceso 1 completa su ejecución en **t = 11**.
 
-Ejecutando el siguiente comando podemos obtener estadísticas mas detalladas:
+Ahora ejecutando el siguiente comando podemos obtener estadísticas mas detalladas:
 ```bash
 ./process-run.py -l 4:100,1:0 -c -p
 ```
@@ -137,7 +147,46 @@ Ejecute:
 📌 **¿Qué sucede ahora? ¿Importa el orden de los procesos?** Justifique con `-c` y `-p`.
 
 **📝 Respuesta:**
+Cuando se invierte el orden de los procesos, el comportamiento del sistema cambia notablemente. En este caso, el Proceso 0 realiza una operación de E/S al inicio, lo que lo deja en estado bloqueado hasta que la operación finalice. Mientras tanto, el Proceso 1 ejecuta sus cuatro instrucciones en la CPU de manera continua.
+Viendo la ejecucion del script evidenciamos lo antes mencionado:
+```
+Process 0
+  io
+  io_done
 
+Process 1
+  cpu
+  cpu
+  cpu
+  cpu
+
+```
+Ahora ejecutando el siguiente comando podemos obtener estadísticas mas detalladas:
+```bash
+./process-run.py -l 1:0,4:100 -c -p
+```
+
+📊 **Estadísticas del sistema**:  
+```
+Time        PID: 0        PID: 1           CPU           IOs
+  1         RUN:io         READY             1
+  2        BLOCKED       RUN:cpu             1             1
+  3        BLOCKED       RUN:cpu             1             1
+  4        BLOCKED       RUN:cpu             1             1
+  5        BLOCKED       RUN:cpu             1             1
+  6        BLOCKED          DONE                           1
+  7*   RUN:io_done          DONE             1
+
+Stats: Total Time 7
+Stats: CPU Busy 6 (85.71%)
+Stats: IO Busy  5 (71.43%)
+```
+- **Tiempo total**: **7 unidades de tiempo**.  
+- **Uso de CPU**: 6 unidades de tiempo (**85.71% de utilización**).  
+- **Uso de IO**: 5 unidades de tiempo (**71.43% de utilización**).
+
+#### Conclusión 
+Sí importa el orden de los procesos, porque en este caso, la CPU no se queda inactiva en ningún momento. Al iniciar con una operación de E/S, el sistema aprovecha el tiempo en el que el Proceso 0 está bloqueado para ejecutar el Proceso 1 sin interrupciones. Esto resulta en una mayor eficiencia en la utilización de la CPU, en comparación con el escenario anterior, donde se terminaba el proceso que usaba CPU antes de ejecutar la E/S.
 ---
 
 ### ⏳ Pregunta 4
