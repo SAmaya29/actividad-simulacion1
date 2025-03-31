@@ -75,6 +75,8 @@ Stats: IO Busy  0 (0.00%)
 ```
 
 Por lo tanto, los resultados obtenidos con `-c` y `-p` confirman la predicción de que la CPU estuvo completamente utilizada.
+
+
 ---
 
 ### 🔄 Pregunta 2
@@ -147,7 +149,10 @@ Stats: IO Busy  5 (45.45%)
 4. Finalmente, el Proceso 1 completa su ejecución en **t = 11**.
 
 #### Conclusión  
-El tiempo total de ejecución es **11 unidades de tiempo**, ya que la operación de E/S introduce un retraso significativo. Sin esta espera, el sistema habría finalizado en **5 unidades de tiempo**. Esto demuestra cómo las operaciones de E/S afectan el rendimiento y utilización del procesador.  
+
+
+El tiempo total de ejecución es **11 unidades de tiempo**, ya que la operación de E/S introduce un retraso significativo. Sin esta espera, el sistema habría finalizado en **5 unidades de tiempo**. Esto demuestra cómo las operaciones de E/S afectan el rendimiento y utilización del procesador.
+
 
 ---
 
@@ -199,7 +204,11 @@ Stats: IO Busy  5 (71.43%)
 - **Uso de IO**: 5 unidades de tiempo (**71.43% de utilización**).
 
 #### Conclusión 
+
+
 Sí importa el orden de los procesos, porque en este caso, la CPU no se queda inactiva en ningún momento. Al iniciar con una operación de E/S, el sistema aprovecha el tiempo en el que el Proceso 0 está bloqueado para ejecutar el Proceso 1 sin interrupciones. Esto resulta en una mayor eficiencia en la utilización de la CPU, en comparación con el escenario anterior, donde se terminaba el proceso que usaba CPU antes de ejecutar la E/S.
+
+
 ---
 
 ### ⏳ Pregunta 4
@@ -242,7 +251,11 @@ Lo que se observa en la ejecucion es lo siguiente:
 4. **El Proceso 1 ejecuta sus 4 instrucciones de CPU consecutivamente.**
 
 #### Conclusión 
+
+
 El uso de SWITCH_ON_END en este escenario provoca que la CPU se desperdicie mientras el Proceso 0 espera por su operación de E/S. Esto reduce la eficiencia del sistema, ya que el Proceso 1 pudo haber utilizado la CPU durante ese tiempo muerto.
+
+
 ---
 
 ### ⚡ Pregunta 5
