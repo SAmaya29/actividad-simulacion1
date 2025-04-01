@@ -288,7 +288,15 @@ Finalización del Proceso 1: Una vez que el Proceso 1 completa todas sus instruc
 
 Reanudación del Proceso 0: Cuando la operación de E/S del Proceso 0 termina, este retoma su ejecución y finaliza su tarea.​
 
-### Conclusión: Al utilizar la opción -S SWITCH_ON_IO, el sistema permite que otro proceso utilice la CPU mientras uno está esperando una operación de E/S. Esto mejora la eficiencia del sistema al reducir el tiempo en que la CPU permanece inactiva, aprovechando mejor los recursos disponibles.
+🔍 Observaciones:
+
+Se permite que el Proceso 1 use la CPU mientras el Proceso 0 espera su E/S.
+
+La CPU no queda inactiva, lo que mejora la eficiencia general.
+
+✅ Conclusión
+
+Al utilizar SWITCH_ON_IO, se aprovechan mejor los recursos del sistema, evitando tiempos muertos de la CPU
 ---
 
 ### 🔁 Pregunta 6
@@ -337,7 +345,15 @@ Stats: IO Busy  15 (48.39%)
 ```
 
 **📝 Respuesta:**
-el sistema no utiliza eficientemente sus recursos. Cuando un proceso inicia una operación de E/S, el planificador cambia al siguiente proceso listo, lo que permite que la CPU siga activa. Sin embargo, una vez que todos los procesos están bloqueados esperando E/S, la CPU permanece inactiva hasta que una operación de E/S se completa, momento en el cual el proceso correspondiente se coloca al final de la cola de listos. Este comportamiento provoca períodos en los que la CPU no se utiliza, reduciendo la eficiencia del sistema.
+🔍 Análisis:
+
+La CPU tiene períodos inactivos cuando todos los procesos están bloqueados por E/S.
+
+El proceso que finaliza su E/S es puesto al final de la cola, lo que introduce ineficiencia.
+
+❌ Conclusión
+
+El sistema no utiliza eficientemente los recursos, ya que la CPU se mantiene inactiva en ciertos momentos.
 
 ---
 
@@ -378,6 +394,7 @@ Stats: IO Busy  15 (71.43%)
 **📝 Respuesta:**
 Al comparar la ejecución del comando con las opciones -I IO_RUN_IMMEDIATE y -I IO_RUN_LATER, observamos diferencias significativas en el comportamiento del sistema.
 
+🔍 Diferencias clave:
 Comportamiento con -I IO_RUN_IMMEDIATE:
 
 Cuando un proceso completa una operación de E/S, el sistema cambia inmediatamente a ese proceso, permitiéndole continuar su ejecución sin demora.​
@@ -386,10 +403,15 @@ Comportamiento con -I IO_RUN_LATER:
 
 Tras finalizar una operación de E/S, el proceso que la solicitó queda en estado listo, pero el sistema continúa ejecutando el proceso actual hasta que este termine o requiera E/S.​
 
-###Conclusión.
+Comparando -I IO_RUN_IMMEDIATE vs -I IO_RUN_LATER:
 
-Utilización de la CPU: Con IO_RUN_IMMEDIATE, la CPU se mantiene ocupada de manera más constante, ya que los procesos que completan E/S retoman su ejecución de inmediato, reduciendo los tiempos de inactividad.​
+Con IO_RUN_IMMEDIATE, cuando un proceso termina su E/S, retoma la CPU de inmediato.
 
-Eficiencia general: Al priorizar los procesos que finalizan E/S, se mejora la capacidad de respuesta del sistema, especialmente en entornos donde las operaciones de E/S son frecuentes y los procesos dependen de resultados inmediatos.
+Con IO_RUN_LATER, el proceso entra en la cola de listos y debe esperar.
+
+✅ Conclusión:
+
+El uso de IO_RUN_IMMEDIATE maximiza la utilización de la CPU, logrando una mayor eficiencia del sistema.
+
 
 ---
