@@ -250,9 +250,7 @@ Lo que se observa en la ejecucion es lo siguiente:
    -Solo entonces el Proceso 1 puede comenzar su ejecución en la CPU.
 4. **El Proceso 1 ejecuta sus 4 instrucciones de CPU consecutivamente.**
 
-#### Conclusión 
-
-
+#### ✅ Conclusión 
 El uso de SWITCH_ON_END en este escenario provoca que la CPU se desperdicie mientras el Proceso 0 espera por su operación de E/S. Esto reduce la eficiencia del sistema, ya que el Proceso 1 pudo haber utilizado la CPU durante ese tiempo muerto.
 
 
@@ -297,6 +295,7 @@ La CPU no queda inactiva, lo que mejora la eficiencia general.
 ✅ Conclusión
 
 Al utilizar SWITCH_ON_IO, se aprovechan mejor los recursos del sistema, evitando tiempos muertos de la CPU
+
 ---
 
 ### 🔁 Pregunta 6
