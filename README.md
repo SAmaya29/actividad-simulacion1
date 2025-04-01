@@ -4,7 +4,7 @@
 | Nombre | Correo | Usuario GitHub |
 |--------|--------|---------------|
 | Sebastian Amaya Perez | sebastian.amaya1@udea.edu.co | SAmaya29 |
-| Nombre completo integrante 2 | correo integrante 2 | github user integrante 2 |
+| Emmanuel Bustamante Valbuena | Emma-Ok |
 
 ---
 
@@ -264,9 +264,31 @@ Ejecute:
 ./process-run.py -l 1:0,4:100 -c -S SWITCH ON IO
 ```
 📌 **¿Qué ocurre ahora? ¿Cómo se compara con el caso anterior?**
+```
+Time        PID: 0        PID: 1           CPU           IOs
+  1         RUN:io         READY             1
+  2        BLOCKED       RUN:cpu             1             1
+  3        BLOCKED       RUN:cpu             1             1
+  4        BLOCKED       RUN:cpu             1             1
+  5        BLOCKED       RUN:cpu             1             1
+  6        BLOCKED          DONE                           1
+  7*   RUN:io_done          DONE             1
+
+```
 
 **📝 Respuesta:**
 
+Inicio del Proceso 0: Este proceso comienza su ejecución y realiza una operación de E/S (entrada/salida) de inmediato.​
+
+Cambio al Proceso 1: Debido a que la opción -S SWITCH_ON_IO está activada, el sistema cambia al Proceso 1 tan pronto como el Proceso 0 inicia su operación de E/S.​
+
+Ejecución del Proceso 1: El Proceso 1, que consta de 4 instrucciones de CPU, se ejecuta de manera continua mientras el Proceso 0 espera que su operación de E/S finalice.​
+
+Finalización del Proceso 1: Una vez que el Proceso 1 completa todas sus instrucciones, el sistema verifica si hay otras tareas pendientes.​
+
+Reanudación del Proceso 0: Cuando la operación de E/S del Proceso 0 termina, este retoma su ejecución y finaliza su tarea.​
+
+Conclusión: Al utilizar la opción -S SWITCH_ON_IO, el sistema permite que otro proceso utilice la CPU mientras uno está esperando una operación de E/S. Esto mejora la eficiencia del sistema al reducir el tiempo en que la CPU permanece inactiva, aprovechando mejor los recursos disponibles.
 ---
 
 ### 🔁 Pregunta 6
@@ -275,8 +297,47 @@ Ejecute:
 ./process-run.py -l 3:0,5:100,5:100,5:100 -S SWITCH ON IO -c -p -I IO RUN LATER
 ```
 📌 **¿Se están utilizando eficientemente los recursos del sistema?**
+```
+Time        PID: 0        PID: 1        PID: 2        PID: 3           CPU           IOs
+  1         RUN:io         READY         READY         READY             1
+  2        BLOCKED       RUN:cpu         READY         READY             1             1
+  3        BLOCKED       RUN:cpu         READY         READY             1             1
+  4        BLOCKED       RUN:cpu         READY         READY             1             1
+  5        BLOCKED       RUN:cpu         READY         READY             1             1
+  6        BLOCKED       RUN:cpu         READY         READY             1             1
+  7*         READY          DONE       RUN:cpu         READY             1
+  8          READY          DONE       RUN:cpu         READY             1
+  9          READY          DONE       RUN:cpu         READY             1
+ 10          READY          DONE       RUN:cpu         READY             1
+ 11          READY          DONE       RUN:cpu         READY             1
+ 12          READY          DONE          DONE       RUN:cpu             1
+ 13          READY          DONE          DONE       RUN:cpu             1
+ 14          READY          DONE          DONE       RUN:cpu             1
+ 15          READY          DONE          DONE       RUN:cpu             1
+ 16          READY          DONE          DONE       RUN:cpu             1
+ 17    RUN:io_done          DONE          DONE          DONE             1
+ 18         RUN:io          DONE          DONE          DONE             1
+ 19        BLOCKED          DONE          DONE          DONE                           1
+ 20        BLOCKED          DONE          DONE          DONE                           1
+ 21        BLOCKED          DONE          DONE          DONE                           1
+ 22        BLOCKED          DONE          DONE          DONE                           1
+ 23        BLOCKED          DONE          DONE          DONE                           1
+ 24*   RUN:io_done          DONE          DONE          DONE             1
+ 25         RUN:io          DONE          DONE          DONE             1
+ 26        BLOCKED          DONE          DONE          DONE                           1
+ 27        BLOCKED          DONE          DONE          DONE                           1
+ 28        BLOCKED          DONE          DONE          DONE                           1
+ 29        BLOCKED          DONE          DONE          DONE                           1
+ 30        BLOCKED          DONE          DONE          DONE                           1
+ 31*   RUN:io_done          DONE          DONE          DONE             1
+
+Stats: Total Time 31
+Stats: CPU Busy 21 (67.74%)
+Stats: IO Busy  15 (48.39%)
+```
 
 **📝 Respuesta:**
+el sistema no utiliza eficientemente sus recursos. Cuando un proceso inicia una operación de E/S, el planificador cambia al siguiente proceso listo, lo que permite que la CPU siga activa. Sin embargo, una vez que todos los procesos están bloqueados esperando E/S, la CPU permanece inactiva hasta que una operación de E/S se completa, momento en el cual el proceso correspondiente se coloca al final de la cola de listos. Este comportamiento provoca períodos en los que la CPU no se utiliza, reduciendo la eficiencia del sistema.
 
 ---
 
@@ -286,7 +347,49 @@ Ejecute:
 ./process-run.py -l 3:0,5:100,5:100,5:100 -S SWITCH ON IO -c -p -I IO RUN IMMEDIATE
 ```
 📌 **¿Cómo cambia el comportamiento? ¿Por qué podría ser útil esta estrategia?**
+```
+Time        PID: 0        PID: 1        PID: 2        PID: 3           CPU           IOs
+  1         RUN:io         READY         READY         READY             1
+  2        BLOCKED       RUN:cpu         READY         READY             1             1
+  3        BLOCKED       RUN:cpu         READY         READY             1             1
+  4        BLOCKED       RUN:cpu         READY         READY             1             1
+  5        BLOCKED       RUN:cpu         READY         READY             1             1
+  6        BLOCKED       RUN:cpu         READY         READY             1             1
+  7*   RUN:io_done          DONE         READY         READY             1
+  8         RUN:io          DONE         READY         READY             1
+  9        BLOCKED          DONE       RUN:cpu         READY             1             1
+ 10        BLOCKED          DONE       RUN:cpu         READY             1             1
+ 11        BLOCKED          DONE       RUN:cpu         READY             1             1
+ 12        BLOCKED          DONE       RUN:cpu         READY             1             1
+ 13        BLOCKED          DONE       RUN:cpu         READY             1             1
+ 14*   RUN:io_done          DONE          DONE         READY             1
+ 15         RUN:io          DONE          DONE         READY             1
+ 16        BLOCKED          DONE          DONE       RUN:cpu             1             1
+ 17        BLOCKED          DONE          DONE       RUN:cpu             1             1
+ 18        BLOCKED          DONE          DONE       RUN:cpu             1             1
+ 19        BLOCKED          DONE          DONE       RUN:cpu             1             1
+ 20        BLOCKED          DONE          DONE       RUN:cpu             1             1
+ 21*   RUN:io_done          DONE          DONE          DONE             1
 
+Stats: Total Time 21
+Stats: CPU Busy 21 (100.00%)
+Stats: IO Busy  15 (71.43%)
+```
 **📝 Respuesta:**
+Al comparar la ejecución del comando con las opciones -I IO_RUN_IMMEDIATE y -I IO_RUN_LATER, observamos diferencias significativas en el comportamiento del sistema.
+
+Comportamiento con -I IO_RUN_IMMEDIATE:
+
+Cuando un proceso completa una operación de E/S, el sistema cambia inmediatamente a ese proceso, permitiéndole continuar su ejecución sin demora.​
+
+Comportamiento con -I IO_RUN_LATER:
+
+Tras finalizar una operación de E/S, el proceso que la solicitó queda en estado listo, pero el sistema continúa ejecutando el proceso actual hasta que este termine o requiera E/S.​
+
+Conclusión.
+
+Utilización de la CPU: Con IO_RUN_IMMEDIATE, la CPU se mantiene ocupada de manera más constante, ya que los procesos que completan E/S retoman su ejecución de inmediato, reduciendo los tiempos de inactividad.​
+
+Eficiencia general: Al priorizar los procesos que finalizan E/S, se mejora la capacidad de respuesta del sistema, especialmente en entornos donde las operaciones de E/S son frecuentes y los procesos dependen de resultados inmediatos.
 
 ---
