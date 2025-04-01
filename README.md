@@ -4,7 +4,7 @@
 | Nombre | Correo | Usuario GitHub |
 |--------|--------|---------------|
 | Sebastian Amaya Perez | sebastian.amaya1@udea.edu.co | SAmaya29 |
-| Emmanuel Bustamante Valbuena | Emma-Ok |
+| Emmanuel Bustamante Valbuena | Emmanuel.bustamante@udea.edu.co | Emma-Ok |
 
 ---
 
@@ -288,7 +288,7 @@ Finalización del Proceso 1: Una vez que el Proceso 1 completa todas sus instruc
 
 Reanudación del Proceso 0: Cuando la operación de E/S del Proceso 0 termina, este retoma su ejecución y finaliza su tarea.​
 
-Conclusión: Al utilizar la opción -S SWITCH_ON_IO, el sistema permite que otro proceso utilice la CPU mientras uno está esperando una operación de E/S. Esto mejora la eficiencia del sistema al reducir el tiempo en que la CPU permanece inactiva, aprovechando mejor los recursos disponibles.
+### Conclusión: Al utilizar la opción -S SWITCH_ON_IO, el sistema permite que otro proceso utilice la CPU mientras uno está esperando una operación de E/S. Esto mejora la eficiencia del sistema al reducir el tiempo en que la CPU permanece inactiva, aprovechando mejor los recursos disponibles.
 ---
 
 ### 🔁 Pregunta 6
@@ -386,7 +386,7 @@ Comportamiento con -I IO_RUN_LATER:
 
 Tras finalizar una operación de E/S, el proceso que la solicitó queda en estado listo, pero el sistema continúa ejecutando el proceso actual hasta que este termine o requiera E/S.​
 
-Conclusión.
+###Conclusión.
 
 Utilización de la CPU: Con IO_RUN_IMMEDIATE, la CPU se mantiene ocupada de manera más constante, ya que los procesos que completan E/S retoman su ejecución de inmediato, reduciendo los tiempos de inactividad.​
 
